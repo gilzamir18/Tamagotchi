@@ -64,12 +64,20 @@ namespace Tamagotchi
 
     public record Mascote
     {
+
+        [JsonIgnore]
+        public string? Nome { get; set; }
+
         [JsonPropertyName("base_experience")]
         public int BaseExperience { get; set; }
         [JsonPropertyName("height")]
         public int Altura { get; set; }
         [JsonPropertyName("width")]
         public int Largura { get; set; }
+
+        [JsonPropertyName("weight")]
+        public int Peso { get; set; }
+
         [JsonPropertyName("held_items")]
         public List<string>? ItensGuardados { get; set; }
         [JsonPropertyName("id")]
@@ -89,7 +97,7 @@ namespace Tamagotchi
     public interface DAO
     {
         public List<TipoDeMascote> GetTiposDeMascote(int maxResult=-1);
-        public Mascote GetMascote(string name);
+        public Mascote? GetMascote(string name);
     }
 
     public class RestAPIDAO : DAO
@@ -177,7 +185,7 @@ namespace Tamagotchi
             }
         }
 
-        public Mascote GetMascote(string nome)
+        public Mascote? GetMascote(string nome)
         {
             var client = new RestClient(options);
             var request = new RestRequest($"/pokemon/{nome}", Method.Get);
@@ -187,6 +195,10 @@ namespace Tamagotchi
             {
                var res =  JsonSerializer.Deserialize<Mascote>(response.Content!)!;
                 return res!;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
             }
             else
             {
