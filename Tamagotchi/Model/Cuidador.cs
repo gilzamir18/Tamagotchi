@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tamagotchi
+namespace Tamagotchi.Model
 {
-    internal class Cuidador
+    public class Cuidador
     {
         public string Nome { get; set; } = string.Empty;
         public string Apelido { get; set; } = string.Empty;
