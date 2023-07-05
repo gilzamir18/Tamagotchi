@@ -7,83 +7,72 @@ using System.Threading.Tasks;
 
 namespace Tamagotchi.Model
 {
-    public record TipoDeMascote
+    public class Mascote
     {
-        [JsonPropertyName("name")]
-        public string? Nome { get; set; }
-        [JsonPropertyName("url")]
-        public string? URL { get; set; }
+        public string Nome { get; }
+        public int Peso { get; }
+        public int Largura { get;  }
+        public int Altura { get; }
+
+        public int Alimentacao => alimentacao;
+        public int Humor => humor;
+
+        private List<Habilidade> habilidades;
+        private int count = 0;
+        private int alimentacao, humor;
+
+        public int QtdHabilidades => count;
+
+        private Random rnd;
+
+        public Mascote(string nome, int peso, int altura, int largura)
+        {
+            rnd = new Random(42);
+
+            Nome = nome;
+            habilidades = new List<Habilidade>();
+            Peso = peso;
+            Altura = altura;
+            Largura = largura;
+            count = 0;
+            alimentacao = rnd.Next(0, 10);
+            humor = rnd.Next(0, 10);
+        }
+
+
+        public void Brincar()
+        {
+            humor = humor + 1 ;
+            if (humor > 10)
+            {
+                humor = 10;
+            }
+            alimentacao -= 1;
+            if (alimentacao <0 )
+            {
+                alimentacao = 0;
+            }
+        }
+
+        public void Alimentar()
+        {
+            alimentacao = alimentacao + 1;
+            if ( alimentacao > 10)
+            {
+                alimentacao = 10;
+            }
+        }
+
+        public void AdicionarHabilidade(Habilidade hab)
+        {
+            habilidades.Add(hab);
+            count++;
+        }
+
+        public Habilidade GetHabilidade(int i)
+        {
+            return habilidades[i];
+        }
     }
 
-    public record ListaDeTiposDeMascote
-    {
-        [JsonPropertyName("count")]
-        public int TotalRegistros { get; set; }
-
-        [JsonPropertyName("next")]
-        public string? Proximo { get; set; }
-
-        [JsonPropertyName("previous")]
-        public string? Anterior { get; set; }
-
-        [JsonPropertyName("results")]
-        public List<TipoDeMascote>? Resultados { get; set; }
-    }
-
-    public record Formulario
-    {
-        [JsonPropertyName("name")]
-        public string? Nome { get; set; }
-        [JsonPropertyName("url")]
-        public string? URL { get; set; }
-    }
-
-    public record IndiceDeJogo
-    {
-        [JsonPropertyName("game_index")]
-        public int Index { get; set; }
-        [JsonPropertyName("version")]
-        public Formulario? Formulario { get; set; }
-    }
-
-    public record Habilidade
-    {
-        [JsonPropertyName("ability")]
-        public Formulario? HabilidadeInfo { get; set; }
-        [JsonPropertyName("is_hidden")]
-        public bool Oculto { get; set; }
-        [JsonPropertyName("slot")]
-        public int Slot { get; set; }
-    }
-
-    public record Mascote
-    {
-        [JsonIgnore]
-        public string? Nome { get; set; }
-
-        [JsonPropertyName("base_experience")]
-        public int BaseExperience { get; set; }
-        [JsonPropertyName("height")]
-        public int Altura { get; set; }
-        [JsonPropertyName("width")]
-        public int Largura { get; set; }
-
-        [JsonPropertyName("weight")]
-        public int Peso { get; set; }
-
-        [JsonPropertyName("held_items")]
-        public List<string>? ItensGuardados { get; set; }
-        [JsonPropertyName("id")]
-        public int ID { get; set; }
-        [JsonPropertyName("is_default")]
-        public bool IsDefault { get; set; }
-        [JsonPropertyName("location_area_encounters")]
-        public string? LocalizacaoAreasEncontro { get; set; }
-
-        [JsonPropertyName("forms")]
-        public List<Formulario>? Formularios { get; set; }
-
-        [JsonPropertyName("abilities")]
-        public List<Habilidade>? Habilidades { get; set; }
-    }
 }
