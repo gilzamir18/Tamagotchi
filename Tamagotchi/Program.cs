@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
-using Tamagotchi.Model;
-using Tamagotchi.Service;
+using Tamaguria.Model;
+using Tamaguria.Service;
 
 var dao = RestAPIDAO.GetInstance();
 Cuidador? cuidador = null;
 
 Console.Clear();
-Tamagotchi.Controller.Iniciar(dao, cuidador!);
-Tamagotchi.Controller.GerenciarMascotes();
+Tamaguria.Controller.Iniciar(dao, cuidador!);
+Tamaguria.Controller.GerenciarMascotes();
 
 

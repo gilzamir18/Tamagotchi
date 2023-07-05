@@ -4,10 +4,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Tamagotchi.Model;
-using Tamagotchi.Service;
+using Tamaguria.Model;
+using Tamaguria.Service;
+using Tamaguria;
 
-namespace Tamagotchi
+namespace Tamaguria
 {
     public sealed class Controller
     {

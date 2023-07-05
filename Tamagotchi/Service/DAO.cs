@@ -8,9 +8,9 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using RestSharp;
-using Tamagotchi.Model;
+using Tamaguria.Model;
 
-namespace Tamagotchi.Service
+namespace Tamaguria.Service
 {
 
 
