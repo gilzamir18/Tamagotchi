@@ -20,8 +20,7 @@ namespace Tamagotchi
         public static void Iniciar(DAO dao, Cuidador cuidador)
         {
             Controller.dao = dao;
-            cuidador = new Cuidador();
-            View.ObterInformacoesDoCuidador(cuidador);
+            cuidador = View.ObterInformacoesDoCuidador();
             Controller.cuidador = cuidador;
         }
 
@@ -32,6 +31,7 @@ namespace Tamagotchi
             Console.WriteLine("\n\n");
             Console.WriteLine("Pressione 'a' para adotar um Pokemon como mascote.");
             Console.WriteLine("Pressione 'e' para brincar um mascote!");
+            Console.WriteLine("Pressione 'n' para alimentar um mascote!");
             Console.WriteLine("Pressione 's' para pesquisar sobre algum bichinho do mundo poke.");
             Console.WriteLine("Pressione 'd' para  mostrar os seus bicinhos virtuais.");
             Console.WriteLine("Pressione 'q' para sair!");
@@ -42,6 +42,8 @@ namespace Tamagotchi
                     View.AdotarMascote(cuidador, dao!);
                     break;
                 case 'e': View.BrincarComMascote(cuidador);
+                    break;
+                case 'n': View.AlimentarMascote(cuidador);
                     break;
                 case 's':
                     View.PesquisarMascotes(dao!);
