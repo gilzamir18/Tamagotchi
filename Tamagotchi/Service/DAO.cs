@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using AutoMapper;
 using RestSharp;
 using Tamaguria.Model;
 
@@ -105,6 +106,9 @@ namespace Tamaguria.Service
         private RestClientOptions options;
 
         private static DAO? _instance = null;
+        private static IMapper? mascoteMapper = null;
+        private static IMapper? locationMapper = null;
+        private static IMapper? habilidadeMapper = null;
 
         private RestAPIDAO()
         {
@@ -118,6 +122,19 @@ namespace Tamaguria.Service
         {
             if (_instance == null)
             {
+
+                habilidadeMapper = new MapperConfiguration(
+                    cfg => cfg.CreateMap<HabilidadeData, Habilidade>()
+                    .ForMember(dest => dest.Nome, o => o.MapFrom(src => src.HabilidadeInfo!.Nome))
+                    .ForMember(dest => dest.URL, o => o.MapFrom(src => src.HabilidadeInfo!.URL))
+                    ).CreateMapper();
+
+                mascoteMapper = new MapperConfiguration(cfg => cfg.CreateMap<MascoteData, Mascote>()
+                .ForMember(dest => dest.Habilidades, o => o.MapFrom(src => src.Habilidades!.Select(h =>  habilidadeMapper.Map<Habilidade>(h) )  ))
+                ).CreateMapper();
+
+
+                locationMapper = new MapperConfiguration(cfg => cfg.CreateMap<MascoteURLData, MascoteLocation>()).CreateMapper();
                 _instance = new RestAPIDAO();
             }
             return _instance;
@@ -156,7 +173,8 @@ namespace Tamaguria.Service
 
                 foreach (var r in results!.Resultados!)
                 {
-                    data.Add(new MascoteLocation(r.Nome!, r.URL!));
+                    //data.Add(new MascoteLocation(r.Nome!, r.URL!));
+                    data.Add(locationMapper!.Map<MascoteLocation>(r));
                     if (maxResult > 0 && data.Count >= maxResult)
                     {
                         break;
@@ -171,10 +189,10 @@ namespace Tamaguria.Service
                     {
 
 
-                        foreach (MascoteURLData urlData in result.Resultados)
+                        foreach (MascoteURLData urlData in result.Resultados!)
                         {
-                            data.Add(new MascoteLocation(urlData.Nome!, urlData.URL!));
-                            
+                            //data.Add(new MascoteLocation(urlData.Nome!, urlData.URL!));
+                            data.Add(locationMapper!.Map<MascoteLocation>(urlData));
                         }
                         if (maxResult > 0 && data.Count >= maxResult)
                         {
@@ -201,15 +219,16 @@ namespace Tamaguria.Service
             {
                 var res = JsonSerializer.Deserialize<MascoteData>(response.Content!)!;
                 res!.Nome = nome;
-                Mascote mas = new Mascote(res.Nome!, res.Peso, res.Altura, res.Largura);
-                foreach (HabilidadeData habData in res.Habilidades!)
+                //Mascote mas = new Mascote(res.Nome!, res.Peso, res.Altura, res.Largura);
+                Mascote mas = mascoteMapper!.Map<Mascote>(res);
+                /*foreach (HabilidadeData habData in res.Habilidades!)
                 {
                     Habilidade hab = new Habilidade(habData.HabilidadeInfo!.Nome!);
                     hab.Oculta = habData.Oculto;
                     hab.Slot = habData.Slot;
                     hab.URL = habData.HabilidadeInfo!.URL!;
                     mas.AdicionarHabilidade(hab);
-                }
+                }*/
                 return mas;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)

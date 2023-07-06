@@ -17,11 +17,11 @@ namespace Tamaguria.Model
         public int Alimentacao => alimentacao;
         public int Humor => humor;
 
-        private List<Habilidade> habilidades;
-        private int count = 0;
+        public List<Habilidade> Habilidades { get; set; }
+
         private int alimentacao, humor;
 
-        public int QtdHabilidades => count;
+        public int QtdHabilidades => Habilidades.Count;
 
         private Random rnd;
 
@@ -30,11 +30,10 @@ namespace Tamaguria.Model
             rnd = new Random(42);
 
             Nome = nome;
-            habilidades = new List<Habilidade>();
+            Habilidades = new List<Habilidade>();
             Peso = peso;
             Altura = altura;
             Largura = largura;
-            count = 0;
             alimentacao = rnd.Next(0, 10);
             humor = rnd.Next(0, 10);
         }
@@ -65,13 +64,12 @@ namespace Tamaguria.Model
 
         public void AdicionarHabilidade(Habilidade hab)
         {
-            habilidades.Add(hab);
-            count++;
+            Habilidades.Add(hab);
         }
 
         public Habilidade GetHabilidade(int i)
         {
-            return habilidades[i];
+            return Habilidades[i];
         }
     }
 

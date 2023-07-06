@@ -87,10 +87,9 @@ namespace Tamaguria
                 Console.WriteLine($"Largura: {mascote.Largura}");
                 Console.WriteLine($"Peso: {mascote.Peso}");
                 Console.WriteLine("\nHabilidades: ");
-                for (int i = 0; i < mascote.QtdHabilidades; i++)
+                foreach (Habilidade h in mascote.Habilidades)
                 {
-                    Habilidade? hab = mascote.GetHabilidade(i);
-                    Console.WriteLine(hab.Nome);
+                    Console.WriteLine(": " + h.Nome);
                 }
                 Console.WriteLine(marcas);
             }

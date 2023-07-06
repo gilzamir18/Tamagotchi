@@ -8,15 +8,14 @@ namespace Tamaguria.Model
 {
     public class Habilidade
     {
-        public string Nome { get; }
+        public string? Nome { get; set; }
         public bool Oculta { get; set; }
         public int Slot { get; set; }
 
         public string? URL { get; set; }
 
-        public Habilidade(string nome)
+        public Habilidade()
         {
-            Nome = nome;      
         }
     }
 }
