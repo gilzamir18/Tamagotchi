@@ -79,8 +79,8 @@ namespace Tamaguria.Service
         [JsonPropertyName("weight")]
         public int Peso { get; set; }
 
-        [JsonPropertyName("held_items")]
-        public List<string>? ItensGuardados { get; set; }
+        //[JsonPropertyName("held_items")]
+        //public List<string>? ItensGuardados { get; set; }
         [JsonPropertyName("id")]
         public int ID { get; set; }
         [JsonPropertyName("is_default")]
@@ -104,17 +104,24 @@ namespace Tamaguria.Service
     public class RestAPIDAO : DAO
     {
         private RestClientOptions options;
-
+        private JsonSerializerOptions jsonSerializerOptions;
+        
         private static DAO? _instance = null;
         private static IMapper? mascoteMapper = null;
         private static IMapper? locationMapper = null;
         private static IMapper? habilidadeMapper = null;
+
+
 
         private RestAPIDAO()
         {
             options = new RestClientOptions("https://pokeapi.co/api/v2/")
             {
                 MaxTimeout = -1,
+            };
+
+            jsonSerializerOptions = new JsonSerializerOptions 
+            { 
             };
         }
 
@@ -217,7 +224,7 @@ namespace Tamaguria.Service
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                var res = JsonSerializer.Deserialize<MascoteData>(response.Content!)!;
+                var res = JsonSerializer.Deserialize<MascoteData>(response.Content!, jsonSerializerOptions)!;
                 res!.Nome = nome;
                 //Mascote mas = new Mascote(res.Nome!, res.Peso, res.Altura, res.Largura);
                 Mascote mas = mascoteMapper!.Map<Mascote>(res);

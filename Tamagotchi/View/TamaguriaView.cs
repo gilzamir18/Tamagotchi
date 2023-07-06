@@ -77,36 +77,81 @@ namespace Tamaguria
             Console.Write("Nome do bichinho que você quer adotar? ");
             string bichinho = Console.ReadLine()!;
             Console.WriteLine();
-
-            Mascote? mascote = dao!.GetMascote(bichinho);
-            if (mascote != null)
+            try
             {
-                cuidador.mascotes.Add(mascote);
-                var marcas = ExibirTituloDaOpcao($"\nQue Legal! Veja algumas habilidades e outras informações sobre seu novo mascote {bichinho}: ");
-                Console.WriteLine($"Altura: {mascote.Altura}");
-                Console.WriteLine($"Largura: {mascote.Largura}");
-                Console.WriteLine($"Peso: {mascote.Peso}");
-                Console.WriteLine("\nHabilidades: ");
-                foreach (Habilidade h in mascote.Habilidades)
+                Mascote? mascote = dao!.GetMascote(bichinho);
+                if (mascote != null)
                 {
-                    Console.WriteLine(": " + h.Nome);
+                    cuidador.mascotes.Add(mascote);
+                    var marcas = ExibirTituloDaOpcao($"\nQue Legal! Veja algumas habilidades e outras informações sobre seu novo mascote {bichinho}: ");
+                    Console.WriteLine($"Altura: {mascote.Altura}");
+                    Console.WriteLine($"Largura: {mascote.Largura}");
+                    Console.WriteLine($"Peso: {mascote.Peso}");
+                    Console.WriteLine("\nHabilidades: ");
+                    foreach (Habilidade h in mascote.Habilidades)
+                    {
+                        Console.WriteLine(": " + h.Nome);
+                    }
+                    Console.WriteLine(marcas);
                 }
-                Console.WriteLine(marcas);
+                else
+                {
+                    Console.WriteLine($"Não encontramos o bichinho {bichinho}. Tente outro!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine($"Não encontramos o bichinho {bichinho}. Tente outro!");
+                Console.WriteLine(@"Detectamos um problema em sua aplicação!
+                    Verifique sua conexão de internet e tente novamente. 
+                    Se o problema persistir, entre em contato com o desenvolvedor!
+                ");
+                Console.Write("Você deseja visualizar um relatório de erro mais detalhado? [s/n] ");
+                char r = Console.ReadKey().KeyChar;
+                while (r != 's' && r != 'n')
+                {
+                    Console.Write("\rOpção Inválida, tente novamente!");
+                    Console.Write(" Você deseja visualizar um relatório de erro mais detalhado? [s/n] ");
+                    r = Console.ReadKey().KeyChar;
+                }
+                Console.WriteLine();
+                if (r == 's')
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
+
             ExibirRodapeDaOpcao();
         }
 
         public static void PesquisarMascotes(DAO dao)
         {
             ExibirCabecalhoDaOpcao("Procure pelos mascotes mais lidinhos do universo!!!!");
-            List<MascoteLocation> locations = dao!.GetMascoteLocationList(100);
-            foreach (var location in locations)
+            try
             {
-                Console.WriteLine($"{location.Nome}: {location.URL}");
+                List<MascoteLocation> locations = dao!.GetMascoteLocationList(100);
+                foreach (var location in locations)
+                {
+                    Console.WriteLine($"{location.Nome}: {location.URL}");
+                }
+            } catch(Exception ex)
+            {
+                Console.WriteLine(@"Detectamos um problema em sua aplicação!
+                    Verifique sua conexão de internet e tente novamente. 
+                    Se o problema persistir, entre em contato com o desenvolvedor!
+                ");
+                Console.Write("Você deseja visualizar um relatório de erro mais detalhado? [s/n] ");
+                char r = Console.ReadKey().KeyChar;
+                while (r != 's' && r != 'n')
+                {
+                    Console.Write("\rOpção Inválida, tente novamente!");
+                    Console.Write(" Você deseja visualizar um relatório de erro mais detalhado? [s/n] ");
+                    r = Console.ReadKey().KeyChar;
+                }
+                Console.WriteLine();
+                if (r == 's')
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             ExibirRodapeDaOpcao();
         }
@@ -116,24 +161,47 @@ namespace Tamaguria
             ExibirCabecalhoDaOpcao("Alimente o seu mascote, mascotes nutridos são mascotes felizes!");
             Console.Write("Informe o nome do mascote que você quer alimentar? ");
             var nomeMascote = Console.ReadLine();
-            var mascote = cuidador.mascotes.Find(m => m.Nome == nomeMascote);
-            if (mascote != null)
+            try
             {
-                char opt = ' ';
-                while (opt != 'q')
+                var mascote = cuidador.mascotes.Find(m => m.Nome == nomeMascote);
+                if (mascote != null)
                 {
-                    Console.Clear();
-                    ExibirCabecalhoDaOpcao("Alimente o seu mascote, mascotes nutridos são mascotes felizes!");
-                    mascote.Alimentar();
-                    MostrarNutricao(mascote);
-                    Console.WriteLine($"Nutrição do Mascote: {mascote!.Alimentacao}");
-                    Console.WriteLine("Pressione 'q' para parar de alimentar o mascote ou outra tecla para continuar!");
-                    opt = Console.ReadKey().KeyChar;
+                    char opt = ' ';
+                    while (opt != 'q')
+                    {
+                        Console.Clear();
+                        ExibirCabecalhoDaOpcao("Alimente o seu mascote, mascotes nutridos são mascotes felizes!");
+                        mascote.Alimentar();
+                        MostrarNutricao(mascote);
+                        Console.WriteLine($"Nutrição do Mascote: {mascote!.Alimentacao}");
+                        Console.WriteLine("Pressione 'q' para parar de alimentar o mascote ou outra tecla para continuar!");
+                        opt = Console.ReadKey().KeyChar;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Você não tem nenhum mascote nomeado {nomeMascote}");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine($"Você não tem nenhum mascote nomeado {nomeMascote}");
+                Console.WriteLine(@"Detectamos um problema em sua aplicação!
+                    Verifique sua conexão de internet e tente novamente. 
+                    Se o problema persistir, entre em contato com o desenvolvedor!
+                ");
+                Console.Write("Você deseja visualizar um relatório de erro mais detalhado? [s/n] ");
+                char r = Console.ReadKey().KeyChar;
+                while (r != 's' && r != 'n')
+                {
+                    Console.Write("\rOpção Inválida, tente novamente!");
+                    Console.Write(" Você deseja visualizar um relatório de erro mais detalhado? [s/n] ");
+                    r = Console.ReadKey().KeyChar;
+                }
+                Console.WriteLine();
+                if (r == 's')
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             ExibirRodapeDaOpcao();
         }

@@ -37,6 +37,7 @@ namespace Tamaguria
             Console.WriteLine("Pressione 'd' para  mostrar os seus bicinhos virtuais.");
             Console.WriteLine("Pressione 'q' para sair!");
             var key = Console.ReadKey();
+            Console.WriteLine();
             switch (key.KeyChar)
             {
                 case 'a':
@@ -58,8 +59,8 @@ namespace Tamaguria
                     break;
                 default:
                     Console.WriteLine($"Opção inválida {key.KeyChar}! Tente outra vez!");
+                    View.ExibirRodapeDaOpcao(false);
                     GerenciarMascotes();
-                    Thread.Sleep(2000);
                     break;
             }
         }
